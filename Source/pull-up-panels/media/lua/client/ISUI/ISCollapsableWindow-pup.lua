@@ -81,8 +81,10 @@ function ISCollapsableWindow:RestoreLayout(name, layout)
 end
 
 function ISCollapsableWindow:SaveLayout(name, layout)
-	self:uncollapse()
 	ISLayoutManager.DefaultSaveWindow(self, layout)
+	if self.isCollapsed and self.doInverseCollapse then
+		layout.y = layout.y - self:getHeight() + self:titleBarHeight()
+	end
 	if self.pin then layout.pin = 'true' else layout.pin = 'false' end
 	if self.doInverseCollapse then layout.invert = 'true' else layout.invert = 'false' end
 end

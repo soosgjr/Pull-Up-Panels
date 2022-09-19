@@ -89,10 +89,10 @@ function ISInventoryPage:update()
 				unlockedIndex = self:nextUnlockedContainer(currentIndex, false)
 			end
 			if unlockedIndex ~= -1 then
-				self:selectContainer(self.backpacks[unlockedIndex])
 				if playerObj:getJoypadBind() ~= -1 then
 					self.backpackChoice = unlockedIndex
 				end
+				self:selectContainer(self.backpacks[unlockedIndex])
 			end
 		end
 	end
