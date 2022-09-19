@@ -23,16 +23,19 @@ the current state instead of the one you're switching to.
 
 ## Compatibility
 
-The mod was developed for version 41.56 of Project Zomboid.
+The mod was developed for version 41.73 of Project Zomboid.
 
 
 ## Known Issues and Limitations
 
 - Tabbed panels which dynamically change their height (info, skills, health,
-  etc.) will collapse to the bottom of the currently selected tab.
+  etc.) will collapse to the bottom of the currently selected tab. These panels
+  can also move around when loading into a game.
 - The make up panel inherits the vanilla bug where the pin button sometimes
   won't appear.
 - The mod's effect on the controller UI was not tested.
+- The mod's effect on multiplayer was not tested, but it's most likely required
+  to be installed on the server and every client to function correctly.
 
 
 ## License
@@ -48,6 +51,9 @@ The mod was developed by Gabor Soos.
 
 
 ## Version History
+
+- Version 0.2.0, September 18th, 2022
+  - Made the mod compatible with version 41.73 of Project Zomboid.
 
 - Version 0.1.0, December 8th, 2021
   - The initial release.
