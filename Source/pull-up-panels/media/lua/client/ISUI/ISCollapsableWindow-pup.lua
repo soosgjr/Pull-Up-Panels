@@ -9,10 +9,12 @@ end
 function ISCollapsableWindow:collapse()
 	self.pin = false;
 	self.doInverseCollapse = true;
-	self.collapseButton:setVisible(false);
-	self.inverseCollapseButton:setVisible(true);
 	self.pinButton:setVisible(false);
-	self.inverseCollapseButton:bringToTop();
+	self.collapseButton:setVisible(false);
+	if self.inverseCollapseButton ~= nil then
+		self.inverseCollapseButton:setVisible(true);
+		self.inverseCollapseButton:bringToTop();
+	end
 end
 
 function ISCollapsableWindow:inverseCollapse()
@@ -103,7 +105,7 @@ function ISCollapsableWindow:addInverseCollapseButton()
 	self.inverseCollapseButton.backgroundColorMouseOver.a = 0;
 	self.inverseCollapseButton:setImage(self.inverseCollapseButtonTexture);
 	self:addChild(self.inverseCollapseButton);
-	
+
 	self.collapseButton:setVisible(false);
 	self.inverseCollapseButton:setVisible(false);
 	self.pinButton:setVisible(true);
