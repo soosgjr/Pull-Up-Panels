@@ -9,10 +9,12 @@ end
 function ISCollapsableWindow:collapse()
 	self.pin = false;
 	self.doInverseCollapse = true;
-	self.collapseButton:setVisible(false);
-	self.inverseCollapseButton:setVisible(true);
 	self.pinButton:setVisible(false);
-	self.inverseCollapseButton:bringToTop();
+	self.collapseButton:setVisible(false);
+	if self.inverseCollapseButton ~= nil then
+		self.inverseCollapseButton:setVisible(true);
+		self.inverseCollapseButton:bringToTop();
+	end
 end
 
 function ISCollapsableWindow:inverseCollapse()
@@ -73,6 +75,12 @@ function ISCollapsableWindow:RestoreLayout(name, layout)
 	ISLayoutManager.DefaultRestoreWindow(self, layout)
 	if layout.pin == 'true' then
 		ISCollapsableWindow.inverseCollapse(self)
+	-- The vanilla code has added this logic around 41.73, but it was causing some panels to vanish.
+	-- ToDo: Verify if this is still broken or if it's even necessary.
+	--elseif layout.pin == 'false' then
+	--	self:collapse()
+	--	self.isCollapsed = true
+	--	self:setMaxDrawHeight(self:titleBarHeight())
 	elseif layout.invert == 'true' then
 		ISCollapsableWindow.collapse(self)
 	else
@@ -103,7 +111,7 @@ function ISCollapsableWindow:addInverseCollapseButton()
 	self.inverseCollapseButton.backgroundColorMouseOver.a = 0;
 	self.inverseCollapseButton:setImage(self.inverseCollapseButtonTexture);
 	self:addChild(self.inverseCollapseButton);
-	
+
 	self.collapseButton:setVisible(false);
 	self.inverseCollapseButton:setVisible(false);
 	self.pinButton:setVisible(true);

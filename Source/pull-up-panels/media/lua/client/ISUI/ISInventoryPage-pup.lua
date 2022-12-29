@@ -2,6 +2,7 @@ require "ISUI/ISInventoryPage"
 
 ISInventoryPage.collapsePanel = ISCollapsableWindow.collapsePanel
 ISInventoryPage.openPanel = ISCollapsableWindow.openPanel
+ISInventoryPage.setPinned = ISCollapsableWindow.pin
 
 ISInventoryPage.createChildren_pupBase = ISInventoryPage.createChildren
 function ISInventoryPage:createChildren()
@@ -14,41 +15,26 @@ function ISInventoryPage:collapse()
 	if ISMouseDrag.dragging and #ISMouseDrag.dragging > 0 then
 		return;
 	end
-	self.pin = false;
-	self.doInverseCollapse = true;
-	self.pinButton:setVisible(false);
-	self.collapseButton:setVisible(false);
-	if self.inverseCollapseButton ~= nil then
-		self.inverseCollapseButton:setVisible(true);
-		self.inverseCollapseButton:bringToTop();
-	end
+	ISCollapsableWindow.collapse(self);
 end
 
 function ISInventoryPage:inverseCollapse()
 	if ISMouseDrag.dragging and #ISMouseDrag.dragging > 0 then
 		return;
 	end
-	self.pin = true;
-	self.doInverseCollapse = false;
-	self.collapseButton:setVisible(false);
-	self.inverseCollapseButton:setVisible(false);
-	self.pinButton:setVisible(true);
-	self.pinButton:bringToTop();
-end
-
-function ISInventoryPage:setPinned()
-	self.pin = false;
-	self.doInverseCollapse = false;
-	self.collapseButton:setVisible(true);
-	self.inverseCollapseButton:setVisible(false);
-	self.pinButton:setVisible(false);
-	self.collapseButton:bringToTop();
+	ISCollapsableWindow.inverseCollapse(self);
 end
 
 function ISInventoryPage:update()
+	local playerObj = getSpecificPlayer(self.player)
+	if self.inventory:getEffectiveCapacity(playerObj) ~= self.capacity then
+		self.capacity = self.inventory:getEffectiveCapacity(playerObj)
+	end
+
 	if self.coloredInv and (self.inventory ~= self.coloredInv or self.isCollapsed) then
 		if self.coloredInv:getParent() then
 			self.coloredInv:getParent():setHighlighted(false)
+			self.coloredInv:getParent():setOutlineHighlight(false);
 		end
 		self.coloredInv = nil;
 	end
@@ -56,6 +42,10 @@ function ISInventoryPage:update()
 	if not self.isCollapsed then
 		if self.inventory:getParent() and (instanceof(self.inventory:getParent(), "IsoObject") or instanceof(self.inventory:getParent(), "IsoDeadBody")) then
 			self.inventory:getParent():setHighlighted(true, false);
+			if getCore():getOptionDoContainerOutline() then
+				self.inventory:getParent():setOutlineHighlight(true);
+				self.inventory:getParent():setOutlineHighlightCol(1, 1, 1, 1);
+			end
 			self.inventory:getParent():setHighlightColor(getCore():getObjectHighlitedColor());
 			self.coloredInv = self.inventory;
 		end
@@ -187,12 +177,7 @@ function ISInventoryPage:RestoreLayout(name, layout)
 end
 
 function ISInventoryPage:SaveLayout(name, layout)
-	ISLayoutManager.DefaultSaveWindow(self, layout)
-	if self.isCollapsed and self.doInverseCollapse then
-		layout.y = layout.y - self:getHeight() + self:titleBarHeight()
-	end
-	if self.pin then layout.pin = 'true' else layout.pin = 'false' end
-	if self.doInverseCollapse then layout.invert = 'true' else layout.invert = 'false' end
+	ISCollapsableWindow.SaveLayout(self, name, layout)
 	self.inventoryPane:SaveLayout(name, layout)
 end
 

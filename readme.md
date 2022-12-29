@@ -23,7 +23,7 @@ the current state instead of the one you're switching to.
 
 ## Compatibility
 
-The mod was developed for version 41.73 of Project Zomboid.
+The mod was developed for version 41.78.16 of Project Zomboid.
 
 
 ## Known Issues and Limitations
@@ -51,6 +51,11 @@ The mod was developed by Gabor Soos.
 
 
 ## Version History
+
+- Version 0.3.0, December 28th, 2022
+  - Made the mod compatible with version 41.78.16 of Project Zomboid.
+  - Fixed the bug where the inventory panel would snap off-screen when using the
+    place item action.
 
 - Version 0.2.0, September 18th, 2022
   - Made the mod compatible with version 41.73 of Project Zomboid.
