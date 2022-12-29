@@ -26,9 +26,15 @@ function ISInventoryPage:inverseCollapse()
 end
 
 function ISInventoryPage:update()
+	local playerObj = getSpecificPlayer(self.player)
+	if self.inventory:getEffectiveCapacity(playerObj) ~= self.capacity then
+		self.capacity = self.inventory:getEffectiveCapacity(playerObj)
+	end
+
 	if self.coloredInv and (self.inventory ~= self.coloredInv or self.isCollapsed) then
 		if self.coloredInv:getParent() then
 			self.coloredInv:getParent():setHighlighted(false)
+			self.coloredInv:getParent():setOutlineHighlight(false);
 		end
 		self.coloredInv = nil;
 	end
@@ -36,6 +42,10 @@ function ISInventoryPage:update()
 	if not self.isCollapsed then
 		if self.inventory:getParent() and (instanceof(self.inventory:getParent(), "IsoObject") or instanceof(self.inventory:getParent(), "IsoDeadBody")) then
 			self.inventory:getParent():setHighlighted(true, false);
+			if getCore():getOptionDoContainerOutline() then
+				self.inventory:getParent():setOutlineHighlight(true);
+				self.inventory:getParent():setOutlineHighlightCol(1, 1, 1, 1);
+			end
 			self.inventory:getParent():setHighlightColor(getCore():getObjectHighlitedColor());
 			self.coloredInv = self.inventory;
 		end

@@ -39,7 +39,17 @@ ISObjectClickHandler.doClick = function (object, x, y)
                     math.abs(playerSq:getY() - parent:getY()) > 1 or
                     playerSq:getZ() ~= parent:getZ() or
                     playerSq:isBlockedTo(parent) then
-                -- out of range
+                if not AdjacentFreeTileFinder.isTileOrAdjacent(playerObj:getCurrentSquare(), parent) then
+                    local adjacent = nil;
+                    adjacent = AdjacentFreeTileFinder.Find(parent, playerObj);
+                    if adjacent ~= nil then
+                        local dist = 3;
+                        if getCore():getOptionAutoWalkContainer() and (IsoUtils.DistanceToSquared(parent:getX(),parent:getY(),playerSq:getX(),playerSq:getY()) <= dist*dist) then
+                            ISTimedActionQueue.clear(playerObj);
+                            ISTimedActionQueue.add(ISWalkToTimedAction:new(playerObj, adjacent));
+                        end
+                    end
+                end
             else
                 --print("adding open container.")
               -- ISTimedActionQueue.add(ISOpenContainerTimedAction:new(getPlayer(), object:getContainer(), 20, x, y));
